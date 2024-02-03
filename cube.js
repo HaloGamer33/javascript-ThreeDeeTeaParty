@@ -94,10 +94,54 @@ function render(objects, context, angleX, angleY, angleZ) {
 }
 
 function project(vertex) {
-    // We do -z because html canvas element has positive y values that go down instead of up
-    return new Vertex2D(vertex.y, -vertex.z); // orthographic view
+    // fov is the "field of view" controlling how wide the perspective field is
+    // viewerDistance is how far the viewer is from the viewing plane
+    const fov = 100
+    const viewerDistance = 100
+
+    // Adjust the field of view based on the z-coordinate and the viewer distance
+    const factor = fov / (viewerDistance + vertex.x);
+
+    // Apply the perspective divide to project the 3D coordinates into 2D
+    const x = vertex.y * factor;
+    const y = -vertex.z * factor;
+
+    return new Vertex2D(x, y);
 }
 
+function project(vertex) {
+    // fov is the "field of view" controlling how wide the perspective field is
+    // viewerDistance is how far the viewer is from the viewing plane
+    const fov = 100
+    const viewerDistance = 100
+
+    // Adjust the field of view based on the z-coordinate and the viewer distance
+    const factor = fov / (viewerDistance + vertex.y);
+
+    // Apply the perspective divide to project the 3D coordinates into 2D
+    const x = vertex.x * factor;
+    const y = -vertex.z * factor;
+
+    return new Vertex2D(x, y);
+}
+
+// function projectWithPerspective(vertex, fov, viewerDistance) {
+//     // fov is the "field of view" controlling how wide the perspective field is
+//     // viewerDistance is how far the viewer is from the viewing plane
+//
+//     // Adjust the field of view based on the z-coordinate and the viewer distance
+//     const factor = fov / (viewerDistance + vertex.z);
+//
+//     // Apply the perspective divide to project the 3D coordinates into 2D const x = vertex.x * factor + canvas.width / 2; // Adjust for canvas center
+//     const y = -vertex.y * factor + canvas.height / 2; // Adjust for canvas center and y-axis inversion
+//
+//     return new Vertex2D(x, y);
+// }
+
+// function project(vertex) {
+//     // We do -z because html canvas element has positive y values that go down instead of up
+//     return new Vertex2D(vertex.y, -vertex.z); // orthographic view
+// }
 
 const myCube = new Cube(50, new Vertex(0, 0, 0));
     
