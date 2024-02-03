@@ -120,6 +120,24 @@ const increaseXButton = document.getElementById("increaseX");
 const increaseYButton = document.getElementById("increaseY");
 const increaseZButton = document.getElementById("increaseZ");
 
+console.log(increaseXButton);
+
+const decreaseXButton = document.getElementById("decreaseX");
+const decreaseYButton = document.getElementById("decreaseY");
+const decreaseZButton = document.getElementById("decreaseZ");
+
+let offset = (Number(getComputedStyle(decreaseXButton).paddingRight.match(/[0-9]*\.?[0-9]+/)[0]) * 2 ) + Number(getComputedStyle(decreaseXButton).width.match(/[0-9]*\.?[0-9]+/)[0]) - Number(getComputedStyle(increaseXButton).width.match(/[0-9]*\.?[0-9]+/)[0]);
+increaseXButton.style.paddingRight = `${offset/2}px`;
+increaseXButton.style.paddingLeft = `${offset/2}px`;
+
+offset = (Number(getComputedStyle(decreaseYButton).paddingRight.match(/[0-9]*\.?[0-9]+/)[0]) * 2 ) + Number(getComputedStyle(decreaseYButton).width.match(/[0-9]*\.?[0-9]+/)[0]) - Number(getComputedStyle(increaseYButton).width.match(/[0-9]*\.?[0-9]+/)[0]);
+increaseYButton.style.paddingRight = `${offset/2}px`;
+increaseYButton.style.paddingLeft = `${offset/2}px`;
+
+offset = (Number(getComputedStyle(decreaseZButton).paddingRight.match(/[0-9]*\.?[0-9]+/)[0]) * 2 ) + Number(getComputedStyle(decreaseZButton).width.match(/[0-9]*\.?[0-9]+/)[0]) - Number(getComputedStyle(increaseZButton).width.match(/[0-9]*\.?[0-9]+/)[0]);
+increaseZButton.style.paddingRight = `${offset/2}px`;
+increaseZButton.style.paddingLeft = `${offset/2}px`;
+
 let globalAngleX = 0;
 let globalAngleY = 0;
 let globalAngleZ = 0;
@@ -127,6 +145,10 @@ let globalAngleZ = 0;
 increaseXButton.addEventListener("click", function() { increaseAngle(10, 0, 0) });
 increaseYButton.addEventListener("click", function() { increaseAngle(0, 10, 0) });
 increaseZButton.addEventListener("click", function() { increaseAngle(0, 0, 10) });
+
+decreaseXButton.addEventListener("click", function() { decreaseAngle(10, 0, 0) });
+decreaseYButton.addEventListener("click", function() { decreaseAngle(0, 10, 0) });
+decreaseZButton.addEventListener("click", function() { decreaseAngle(0, 0, 10) });
 
 function increaseAngle(x, y, z) {
     const canvas = document.getElementById("cubeCanvas");
@@ -141,6 +163,23 @@ function increaseAngle(x, y, z) {
     globalAngleX += x; // Rotation around X-axis in degrees
     globalAngleY += y; // Rotation around Y-axis in degrees
     globalAngleZ += z; // Rotation around Z-axis in degrees
+    
+    render([myCube], context, globalAngleX, globalAngleY, globalAngleZ);
+}
+
+function decreaseAngle(x, y, z) {
+    const canvas = document.getElementById("cubeCanvas");
+    const context = canvas.getContext("2d");
+
+    context.save();
+    // This clears the whole canvas after transforming coordinates see this: https://stackoverflow.com/questions/2142535/how-to-clear-the-canvas-for-redrawing
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.restore();
+ 
+    globalAngleX -= x; // Rotation around X-axis in degrees
+    globalAngleY -= y; // Rotation around Y-axis in degrees
+    globalAngleZ -= z; // Rotation around Z-axis in degrees
     
     render([myCube], context, globalAngleX, globalAngleY, globalAngleZ);
 }
